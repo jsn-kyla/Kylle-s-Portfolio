@@ -1,0 +1,894 @@
+/* GLOBAL */
+body {
+    cursor: none;
+    margin: 0;
+    padding: 0;
+
+    background-color: #2f0b48; /* Galaxy background */
+    font-family: "Poppins", sans-serif;
+    overflow-x: hidden;
+}
+
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 50%;
+    left: 50%;                 /* CENTER horizontally */
+    transform: translateX(-50%); /* CENTER horizontally */
+    background-color: #dba1c5;
+    padding: 20px 0;
+    z-index: 1000;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+}
+
+
+.navbar ul {
+    display: flex;
+    list-style: none;
+    justify-content: center;
+    gap: 60px;
+    padding: 0;
+    margin: 0;
+}
+
+.navbar a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #2f0b48;
+    font-size: 1.2rem;
+    transition: 0.3s;
+}
+
+.navbar a:hover {
+    opacity: 0.7;
+}
+
+/* HERO SECTION */
+.hero {
+    background-image: url("cloud_bg.png"); 
+    background-size: cover;
+     background-repeat: no-repeat; /* Prevents tiling */
+    background-position: center;  /* Centers the image */
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Big name "KYLLE" */
+.hero-name {
+    position: absolute;
+    top: 450px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.hero-name img {
+    display: block;
+    width: 100%; /* optional */
+}
+
+.hero-name:hover {
+    transform: translate(-50%, -50%) scale(1.05);
+    filter: drop-shadow(0 0 10px #fff);
+    cursor: pointer;
+}
+
+/* Astronaut wrapper — positioned & contains both image + trail */
+.astronaut-wrap {
+    position: absolute;
+    width: 200px;         /* size of wrapper matching astronaut size */
+    height: 200px;
+    pointer-events: none; /* allow clicks to pass through except on name */
+    transform-origin: center;
+    z-index: 8;
+    /* keep transform for centering float via child if needed */
+}
+
+/* Astronaut image (idle float uses translateY) */
+.astronaut {
+    position: absolute;
+    width: 100%;
+    height: auto;
+    left: 0;
+    top: 0;
+    transform-origin: center;
+    z-index: 10;
+    animation: float 4s ease-in-out infinite;
+    will-change: transform, opacity;
+}
+
+/* Idle floating (only moves image subtly up/down) */
+@keyframes float {
+    0%   { transform: translateY(0px); }
+    50%  { transform: translateY(-14px); }
+    100% { transform: translateY(0px); }
+}
+
+/* S-curve fly animation applied to the wrapper so trail + image move together */
+.fly-away {
+    animation: flyS 2400ms cubic-bezier(.22,.9,.34,1) forwards;
+    pointer-events: none;
+}
+
+/* S-curve keyframes: translate() moves relative to wrapper start position */
+@keyframes flyS {
+    0% {
+        transform: translate3d(0px, 0px, 0) rotate(0deg);
+        opacity: 1;
+    }
+    20% {
+        transform: translate3d(80px, -40px, 0) rotate(-8deg);
+    }
+    45% {
+        transform: translate3d(-40px, -130px, 0) rotate(6deg);
+    }
+    70% {
+        transform: translate3d(120px, -260px, 0) rotate(-12deg);
+    }
+    100% {
+        transform: translate3d(0px, -900px, 0) rotate(25deg);
+        opacity: 0;
+    }
+}
+
+/* Trail behind astronaut — blurred, elongated glow */
+.astro-trail {
+    position: absolute;
+    left: 20%;
+    top: 50%;
+    width: 140%;
+    height: 60%;
+    transform: translate(-50%, -50%) rotate(-10deg);
+    background: radial-gradient(ellipse at 20% 50%, rgba(180,220,255,0.95) 0%, rgba(180,220,255,0.18) 20%, rgba(180,220,255,0.04) 50%, transparent 70%);
+    filter: blur(14px);
+    opacity: 0;
+    z-index: 6;
+    transition: opacity 200ms linear;
+    will-change: transform, opacity;
+    pointer-events: none;
+}
+
+/* When flying, show and animate the trail slightly (attached to wrapper) */
+.fly-away .astro-trail {
+    opacity: 1;
+    animation: trailFollow 2400ms cubic-bezier(.22,.9,.34,1) forwards;
+}
+
+/* Trail subtle motion while following ship */
+@keyframes trailFollow {
+    0%   { transform: translate(-50%, -50%) rotate(-10deg) scaleX(0.8); opacity: 0.85; filter: blur(10px); }
+    40%  { transform: translate(-60%, -90%) rotate(-18deg) scaleX(1.05); opacity: 0.95; filter: blur(12px); }
+    70%  { transform: translate(-30%, -180%) rotate(-6deg) scaleX(1.1); opacity: 0.7; filter: blur(14px); }
+    100% { transform: translate(0%, -650%) rotate(0deg) scaleX(1.2); opacity: 0; filter: blur(20px); }
+}
+
+/* Clouds bottom foreground */
+.clouds {
+    position: absolute;      /* Stick to parent */
+    bottom: 0;               /* Place at the bottom */
+    left: 0;
+    width: 100%; 
+    height: auto;
+
+    background-size: cover;
+    background-position: bottom;
+    background-repeat: no-repeat;
+
+    pointer-events: none;    /* So it doesn’t block clicks */
+    z-index: 5;              /* adjust if needed */
+}
+
+
+/* Floating animation */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-18px); }
+    100% { transform: translateY(0px); }
+}
+
+/* Background Section */
+.about-section {
+    height: 100vh;
+    background: #480b3e;
+    background-size: cover;
+    padding: 80px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Floating Glass Card */
+.about-card {
+    width: 80%;
+    max-width: 1100px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 35px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    padding: 40px;
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+}
+
+.about-card:hover {
+    transform: perspective(1000px) rotateY(6deg) rotateX(3deg);
+}
+
+/* Parallax effect elements */
+.about-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.about-card,
+.about-astronaut {
+    transition: transform 0.2s ease-out;
+    will-change: transform;
+}
+
+/* Neon animated border */
+.about-card {
+    position: relative;
+    overflow: hidden; 
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.about-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 35px;
+    padding: 2px;
+    background: linear-gradient(120deg, #6e4fdd, #a661c9, #c470e8, #d26bd2);
+    background-size: 300% 300%;
+    animation: borderGlow 6s ease infinite;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: -1;
+}
+
+.about-card:hover::before {
+    opacity: 1;
+}
+
+@keyframes borderGlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Astronaut Image */
+.about-left {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.about-astronaut {
+    width: 230px;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+
+
+.about-right h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #ffb5ff;
+    text-shadow: 0 0 12px #ff89ff;
+}
+
+.about-right p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 15px;
+    color: #fce7ff;
+}
+
+.highlight {
+    color: #ffd0ff;
+    font-weight: bold;
+}
+
+/* Details List */
+.about-details p {
+    font-size: 1rem;
+    margin: 8px 0;
+    opacity: 0.9;
+}
+
+/* Fix typewriter overflow */
+.about-right {
+    
+    position: relative;
+    max-width: 600px;  /* Adjust as needed */
+    overflow: hidden;  /* Prevent text from escaping */
+}
+
+
+/* =============================
+   SKILLS SECTION
+============================= */
+.skills-section {
+    min-height: 100vh;
+    background: #3d0b55;
+    padding: 100px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.skills-title {
+    text-align: center;
+    color: #ffb4dc;
+    font-size: 4rem;
+    margin-bottom: 50px;
+    text-shadow: 0 0 12px #c55a85;
+}
+
+
+.skills-container {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Card wrapper */
+.skill-card {
+    width: 350px;
+    height: 300px;
+    padding: 30px;
+    perspective: 1000px; /* Enables 3D flip */
+}
+
+.skill-card-front img {
+    width: 90px;           /* Adjust size */
+    height: 90px;          /* Keep it square */
+    object-fit: contain;   /* Prevent distortion */
+    filter: drop-shadow(0 0 8px #edb3ff);
+    transition: transform 0.3s ease;
+}
+
+
+/* Inner card (rotates) */
+.skill-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.7s;
+    transform-style: preserve-3d;
+    cursor: pointer;
+}
+
+/* Flip on click */
+.skill-card.clicked .skill-card-inner {
+    transform: rotateY(180deg);
+}
+
+/* Glass styling for both sides */
+.skill-card-front,
+.skill-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    background: rgba(255,255,255,0.15);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    backface-visibility: hidden;
+}
+
+/* FRONT SIDE */
+.skill-icon {
+    font-size: 5rem;
+    color: #fff;
+}
+
+/* BACK SIDE */
+.skill-card-back {
+    transform: rotateY(180deg);
+    padding: 20px;
+}
+
+.skill-card-back h2 {
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.skill-card-back ul li {
+    list-style: none;
+    color: #fff;
+    font-size: 1.2rem;
+    margin: 5px 0;
+}
+
+/* Titles inside card */ 
+.skill-card h2 { 
+    margin-bottom: 20px; 
+    color: #ffbaf5; 
+    text-shadow: 0 0 10px #d36ad1; } 
+    
+/* Skill list */ 
+.skill-card ul { 
+    list-style: none; 
+    padding: 0; 
+    margin: 0; 
+} 
+.skill-card li { 
+    font-size: 1.1rem; 
+    margin: 10px 0; 
+    opacity: 0.9; 
+    padding-left: 15px; 
+    position: relative; 
+} 
+
+/* Small glowing bullet */ 
+.skill-card li::before { 
+    content: "•"; 
+    color: #ffe3ff; 
+    text-shadow: 0 0 6px #ffc5fc; 
+    position: absolute; 
+    left: 0; top: 2px; }
+
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .skill-card {
+        width: 80%;
+    }
+}
+
+
+/* Projects Section */
+.projects-section {
+    height: 100vh;
+    padding: 120px 40px;
+    background: #2b0b55;
+}
+
+.projects-title {
+    text-align: center;
+    color: #ffb4dc;
+    font-size: 4rem;
+    margin-bottom: 50px;
+    text-shadow: 0 0 12px #c55a85;
+}
+/* ------------------------------
+   ORION CONSTELLATION CONTAINER
+--------------------------------*/
+.orion-constellation {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    margin: 0 auto;
+    background: radial-gradient(circle at center, #1c1f4f, #120a28);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+/* ------------------------------
+   STAR BASE STYLE
+--------------------------------*/
+.star {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 
+        0 0 12px #a9d8ff,
+        0 0 20px #7bc4ff,
+        0 0 30px rgba(120,180,255,0.4);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover glow + scale */
+.star:hover {
+    transform: scale(1.6);
+    box-shadow:
+        0 0 16px #d1ebff,
+        0 0 26px #aeddff,
+        0 0 40px rgba(180,220,255,0.6);
+}
+/* ------------------------------
+    ORION STAR POSITIONS (Matches the provided image)
+--------------------------------*/
+
+/* Shoulders (Wider and higher) */
+.s-betelgeuse { top: 20%; left: 35%; }
+.s-bellatrix  { top: 15%; left: 70%; }
+
+/* Belt (Tilted down-right) */
+.s-belt1 { top: 50%; left: 40%; }
+.s-belt2 { top: 55%; left: 50%; }
+.s-belt3 { top: 60%; left: 60%; }
+
+/* Knees/Feet (Wider base) */
+.s-saiph { top: 85%; left: 38%; }
+.s-rigel { top: 85%; left: 65%; }
+
+
+
+/* ------------------------------
+    Updated STAR BASE STYLE for size consistency
+--------------------------------*/
+.star {
+    position: absolute;
+    width: 12px; /* Reset base size */
+    height: 12px; /* Reset base size */
+    background: white;
+    border-radius: 50%;
+}
+
+/* ------------------------------
+   CONSTELLATION LINES (SVG)
+--------------------------------*/
+.orion-lines {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.c-line {
+    stroke: rgba(180, 220, 255, 0.9);
+    stroke-width: 2px;
+    opacity: 0; /* hidden at first */
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+    
+    filter: drop-shadow(0 0 8px #b3e0ff);
+    transition: opacity 0.3s ease;
+}
+
+
+/* Activated animation */
+.c-line.animate {
+    opacity: 1;
+    animation: drawLine 1.8s ease forwards;
+}
+
+@keyframes drawLine {
+    from {
+        stroke-dashoffset: 200;
+    }
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes pulseLine {
+    0% { opacity: .6; }
+    50% { opacity: 1; }
+    100% { opacity: .6; }
+}
+.shooting-star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 8px white;
+    opacity: 0;
+    animation: shoot 6s linear forwards;
+}
+
+@keyframes shoot {
+    0% {
+        transform: translate(0, 0) scale(0.5);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    50% {
+        transform: translate(500px, 300px) scale(1.4);
+        opacity: 0.9;
+    }
+    100% {
+        transform: translate(900px, 600px) scale(1);
+        opacity: 0;
+    }
+}
+
+
+
+/* ------------------------------
+   POPUP CARD (GLASS EFFECT)
+--------------------------------*/
+.project-popup {
+    position: absolute; 
+    left: 100px;      /* Moves to left side */
+    top: 50%;        /* Vertical center */
+    transform: translateY(-50%) scale(0.92); /* Center it + keep your scale */
+
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 15px 20px;
+    width: 260px;
+    color: white;
+
+    border: 1px solid rgba(255,255,255,0.3);
+    opacity: 0;
+    display: none;
+
+    pointer-events: none;
+    z-index: 100;
+
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.project-popup.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(-50%) scale(1); /* Reveal smoothly & stay centered */
+}
+
+.project-popup h2 {
+    margin: 0 0 5px 0;
+    font-size: 1.2rem;
+    color: #ffd6f9;
+    text-shadow: 0 0 6px #c26fd1;
+}
+
+.project-popup p {
+    margin: 0;
+    opacity: 0.85;
+    font-size: 0.9rem;
+    line-height: 1.3rem;
+}
+
+.popup-img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 12px;
+}
+
+.popup-sub {
+    margin-top: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    
+}
+
+
+/* ------------------------------
+   RESPONSIVE SCALING
+--------------------------------*/
+@media (max-width: 768px) {
+    .orion-constellation {
+        height: 450px;
+    }
+
+    .star {
+        width: 9px;
+        height: 9px;
+    }
+
+    .project-popup {
+        width: 200px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .orion-constellation {
+        height: 380px;
+    }
+}
+
+.star:hover {
+    animation: pulse 0.9s infinite alternate;
+}
+
+@keyframes pulse {
+    from { transform: scale(1.2); }
+    to { transform: scale(1.5); }
+}
+
+
+/* Main cursor (soft glowing orb) */
+.cursor-core {
+    position: fixed;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+
+    background: radial-gradient(circle, #ffffff, #bfe3ff);
+    box-shadow: 
+        0 0 12px rgba(180, 220, 255, 0.9),
+        0 0 24px rgba(120, 180, 255, 0.7),
+        0 0 36px rgba(100, 150, 255, 0.5);
+
+    transform: translate(-50%, -50%);
+    transition: transform 0.06s linear;
+}
+
+/* Ribbon container */
+.cursor-ribbon {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+}
+
+/* Smooth galaxy ribbon piece */
+.ribbon-segment {
+    position: fixed;
+    width: 65px;
+    height: 28px;
+    border-radius: 30px;
+
+    background: linear-gradient(
+        90deg,
+        rgba(150, 130, 255, 0.28),
+        rgba(255, 140, 220, 0.22),
+        rgba(100, 180, 255, 0.28)
+    );
+
+    filter: blur(18px);
+    opacity: 0.8;
+
+    transform: translate(-50%, -50%);
+    animation: fadeRibbon 0.9s ease-out forwards;
+}
+
+@keyframes fadeRibbon {
+    0% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
+}
+
+/* Default state: hidden before entering screen */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+/* When visible */
+.reveal.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* =============================
+   FOOTER SECTION
+============================= */
+.footer-section {
+    position: relative;
+    width: 100%;
+    padding: 60px 20px 30px 20px;
+    background: #2b0b48;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #fff;
+    overflow: hidden;
+}
+
+/* Glass card wrapper */
+.footer-card {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 40px;
+    width: 80%;
+    max-width: 1100px;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(20px);
+    border-radius: 35px;
+    padding: 40px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+}
+
+.footer-card:hover {
+    transform: perspective(1000px) rotateY(3deg) rotateX(2deg);
+}
+
+/* Left & Right columns */
+.footer-left, .footer-right {
+    flex: 1;
+    min-width: 220px;
+}
+
+.footer-left h2,
+.footer-right h2 {
+    font-size: 1.8rem;
+    color: #ffb5ff;
+    margin-bottom: 15px;
+    text-shadow: 0 0 8px #d36ad1;
+}
+
+.footer-left p, .footer-right p {
+    font-size: 1rem;
+    margin: 6px 0;
+    opacity: 0.9;
+}
+
+.footer-left .highlight a {
+    color: #ffb5ff;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+.footer-left .highlight a:hover {
+    color: #ffd0ff;
+    text-shadow: 0 0 6px #ffb5ff;
+}
+
+.highlight {
+    color: #ffd0ff;
+    font-weight: bold;
+}
+
+/* Social icons */
+.social-icons {
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.social-icon {
+    font-size: 1.6rem;
+    color: #fff;
+    text-decoration: none;
+    transition: transform 0.3s, color 0.3s, text-shadow 0.3s;
+}
+
+.social-icon:hover {
+    transform: scale(1.3);
+    color: #ffb5ff;
+    text-shadow: 0 0 8px #d36ad1;
+}
+
+/* Footer note */
+.footer-note {
+    margin-top: 25px;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+}
+
+/* Neon animated border for footer card */
+.footer-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 35px;
+    padding: 2px;
+    background: linear-gradient(120deg, #6e4fdd, #a661c9, #c470e8, #d26bd2);
+    background-size: 300% 300%;
+    animation: borderGlow 6s ease infinite;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: -1;
+}
+
+.footer-card:hover::before {
+    opacity: 1;
+}
